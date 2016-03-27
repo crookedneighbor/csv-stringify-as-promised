@@ -1,0 +1,49 @@
+{
+  "name": "csv-stringify-as-promised",
+  "version": "1.0.0",
+  "description": "csv-stringify wrapped in a promise",
+  "main": "lib/index.js",
+  "scripts": {
+    "lint": "standard | snazzy",
+    "test": "npm run lint && mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/crookedneighbor/csv-stringify-as-promised.git"
+  },
+  "keywords": [
+    "csv",
+    "promise"
+  ],
+  "author": "Blade Barringer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crookedneighbor/csv-stringify-as-promised/issues"
+  },
+  "homepage": "https://github.com/crookedneighbor/csv-stringify-as-promised#readme",
+  "dependencies": {
+    "csv-stringify": "^1.0.2"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "snazzy": "^3.0.0",
+    "standard": "^6.0.8",
+    "testdouble": "^1.2.0"
+  },
+  "engines" : { "node" : ">=4" },
+  "standard": {
+    "globals": [
+      "after",
+      "afterEach",
+      "before",
+      "beforeEach",
+      "context",
+      "describe",
+      "it",
+      "xcontext",
+      "xdescribe",
+      "xit"
+    ]
+  }
+}
