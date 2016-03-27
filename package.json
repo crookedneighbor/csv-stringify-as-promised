@@ -25,13 +25,16 @@
     "csv-stringify": "^1.0.2"
   },
   "devDependencies": {
+    "bluebird": "^3.3.4",
     "chai": "^3.5.0",
     "mocha": "^2.4.5",
     "snazzy": "^3.0.0",
     "standard": "^6.0.8",
     "testdouble": "^1.2.0"
   },
-  "engines" : { "node" : ">=4" },
+  "engines": {
+    "node": ">=4"
+  },
   "standard": {
     "globals": [
       "after",

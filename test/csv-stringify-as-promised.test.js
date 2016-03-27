@@ -41,4 +41,31 @@ describe('csv-stringify-as-promised', () => {
       })
     })
   })
+
+  context('custom promises', () => {
+    beforeEach(() => {
+      td.when(csv(this.input, td.callback)).thenCallback(null, 'stringified csv')
+    })
+
+    it('uses Node\'s built-in Promise object by default', function () {
+      let promise = csvStringify(this.input)
+
+      expect(promise).to.be.an.instanceOf(Promise)
+    })
+
+    it('allows you to use your preferred promise library', function (done) {
+      let bluebird = require('bluebird')
+      csvStringify.Promise = bluebird
+
+      let promise = csvStringify(this.input)
+
+      expect(promise).to.be.an.instanceOf(bluebird)
+
+      promise.then((csv) => {
+        expect(csv).to.eql('stringified csv')
+        csvStringify.Promise = Promise
+        done()
+      }).catch(done)
+    })
+  })
 })
