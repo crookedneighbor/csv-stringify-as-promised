@@ -53,7 +53,7 @@ describe('csv-stringify-as-promised', () => {
   })
 
   context('custom promises', () => {
-    beforeEach(() => {
+    beforeEach(function () {
       td.when(csv(this.input, {}, td.callback)).thenCallback(null, 'stringified csv')
     })
 
