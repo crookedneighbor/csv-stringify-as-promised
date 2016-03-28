@@ -19,6 +19,19 @@ stringify(input).then((output) => {
 })
 ```
 
+You can pass any [`csv-stringify` options](http://csv.adaltas.com/stringify/) by passing an object as the second argument.
+
+```js
+let options = { quotedString: true }
+
+stringify(input, options).then((output) => {
+  assert.equal(output, '"1","2","3","4"\n"a","b","c","d"\n')
+}).catch((err) => {
+  // handle error
+})
+```
+
+
 ### Use your own promise library
 
 By default, this module uses Node's builtin `Promise` object, but if you prefer to use a different promise library, you can do so simply by overwriting the `Promise` property on the module.
