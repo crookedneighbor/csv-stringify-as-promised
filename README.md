@@ -13,7 +13,7 @@ let assert = require('assert')
 let input = [ [ '1', '2', '3', '4' ], [ 'a', 'b', 'c', 'd' ] ]
 
 stringify(input).then((output) => {
-  assert.eql(output, '1,2,3,4\na,b,c,d\n')
+  assert.equal(output, '1,2,3,4\na,b,c,d\n')
 }).catch((err) => {
   // handle error
 })
