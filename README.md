@@ -37,25 +37,33 @@ stringify(input, options).then((output) => {
 By default, this module uses Node's builtin `Promise` object, but if you prefer to use a different promise library, you can do so simply by overwriting the `Promise` property on the module.
 
 ```js
-'use strict'
+const stringify = require('csv-stringify-as-promised');
+const bluebird = require('bluebird');
 
-let stringify = require('csv-stringify-as-promised')
-let bluebird = require('bluebird')
+stringify.Promise = bluebird;
 
-stringify.Promise = bluebird
-
-let input = [ [ '1', '2', '3', '4' ], [ 'a', 'b', 'c', 'd' ] ]
+const input = [ [ '1', '2', '3', '4' ], [ 'a', 'b', 'c', 'd' ] ];
 
 stringify(input).then((output) => {
   // uses bluebird instead of Promise
 }).catch((err) => {
   // handle error
-})
+});
+```
+
+### Use your own csv-stringify library
+
+By default, this module uses `csv-stringify` library, but if you prefer to use a different CSV library, you can do so simply by overwriting the `csvStringify` property on the module.
+
+```js
+const stringify = require('csv-stringify-as-promised');
+
+stringify.csvStringify = yourCustomLibrary;
 ```
 
 ## Requirements
 
-This module requires Node v4 or greater
+This module requires NodeJS 8 or greater
 
 ## Tests
 

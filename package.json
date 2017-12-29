@@ -1,10 +1,11 @@
 {
   "name": "csv-stringify-as-promised",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "csv-stringify wrapped in a promise",
   "main": "lib/index.js",
   "scripts": {
-    "lint": "standard | snazzy",
+    "lint": "./node_modules/.bin/eslint lib test",
+    "test-mocha": "./node_modules/.bin/mocha",
     "test": "npm run lint && mocha"
   },
   "repository": {
@@ -26,27 +27,12 @@
   },
   "devDependencies": {
     "bluebird": "^3.3.4",
-    "chai": "^3.5.0",
-    "mocha": "^2.4.5",
-    "snazzy": "^3.0.0",
-    "standard": "^6.0.8",
+    "chai": "^4.1.2",
+    "eslint-config-airbnb-improved": "^2.3.0",
+    "mocha": "^4.0.1",
     "testdouble": "^1.2.0"
   },
   "engines": {
-    "node": ">=4"
-  },
-  "standard": {
-    "globals": [
-      "after",
-      "afterEach",
-      "before",
-      "beforeEach",
-      "context",
-      "describe",
-      "it",
-      "xcontext",
-      "xdescribe",
-      "xit"
-    ]
+    "node": ">=8"
   }
 }

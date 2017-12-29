@@ -1,81 +1,83 @@
-'use strict'
+const td = require('testdouble');
+const bluebird = require('bluebird');
+const expect = require('chai').expect;
+const csvStringifyAsPromised = require('../lib');
 
-let td = require('testdouble')
-let csv = td.replace('csv-stringify')
-let expect = require('chai').expect
-
-let csvStringify = require('../lib')
+const input = [
+  ['header1', 'header2', 'header3'],
+  ['a', 'b', 'c'],
+  ['d', 'e', 'f'],
+  ['g', 'h', 'i'],
+];
 
 describe('csv-stringify-as-promised', () => {
-  beforeEach(function () {
-    this.input = [
-      ['header1', 'header2', 'header3'],
-      ['a', 'b', 'c'],
-      ['d', 'e', 'f'],
-      ['g', 'h', 'i']
-    ]
-  })
-
-  afterEach(function () {
-    td.reset()
-  })
+  beforeEach(() => {
+    csvStringifyAsPromised.csvStringify = null;
+    csvStringifyAsPromised.Promise = null;
+  });
 
   context('csv-stringify', () => {
-    it('resolves with string when csv-stringify callback completes', function (done) {
-      td.when(csv(this.input, {}, td.callback)).thenCallback(null, 'stringified csv')
+    it('resolves with string when csv-stringify callback completes', async () => {
+      const csvStringify = td.function();
+      td.when(csvStringify(input, {}, td.callback)).thenCallback(null, 'stringified csv');
+      csvStringifyAsPromised.csvStringify = csvStringify;
+      csvStringifyAsPromised.Promise = Promise;
 
-      csvStringify(this.input).then((string) => {
-        td.verify(csv(this.input, {}, td.callback))
-        expect(string).to.eql('stringified csv')
-        done()
-      }).catch(done)
-    })
+      const string = await csvStringifyAsPromised(input);
+      td.verify(csvStringify(input, {}, td.callback));
+      expect(string).to.eql('stringified csv');
+    });
 
-    it('rejects with error when csv-stringify callback errors', function (done) {
-      td.when(csv(this.input, {}, td.callback)).thenCallback('an error')
+    it('rejects with error when csv-stringify callback errors', async () => {
+      const csvStringify = td.function();
+      td.when(csvStringify(input, {}, td.callback)).thenCallback('an error');
+      csvStringifyAsPromised.csvStringify = csvStringify;
+      csvStringifyAsPromised.Promise = Promise;
 
-      csvStringify(this.input).then(done).catch((err) => {
-        td.verify(csv(this.input, {}, td.callback))
-        expect(err).to.eql('an error')
-        done()
-      })
-    })
+      try {
+        await csvStringifyAsPromised(input);
+        expect.fail();
+      } catch (err) {
+        td.verify(csvStringify(input, {}, td.callback));
+        expect(err).to.eql('an error');
+      }
+    });
 
-    it('passes on options to csv-stringify', function (done) {
-      let options = { quotedString: true }
-      td.when(csv(this.input, options, td.callback)).thenCallback(null, 'foo')
+    it('passes on options to csv-stringify', async () => {
+      const options = { quotedString: true };
+      const csvStringify = td.function();
+      td.when(csvStringify(input, options, td.callback)).thenCallback(null, 'foo');
+      csvStringifyAsPromised.csvStringify = csvStringify;
+      csvStringifyAsPromised.Promise = Promise;
 
-      csvStringify(this.input, options).then((string) => {
-        td.verify(csv(this.input, options, td.callback))
-        done()
-      }).catch(done)
-    })
-  })
+      await csvStringifyAsPromised(input, options);
+      td.verify(csvStringify(input, options, td.callback));
+    });
+  });
 
   context('custom promises', () => {
-    beforeEach(function () {
-      td.when(csv(this.input, {}, td.callback)).thenCallback(null, 'stringified csv')
-    })
+    beforeEach(() => {
+      const csvStringify = td.function();
+      td.when(csvStringify(input, {}, td.callback)).thenCallback(null, 'stringified csv');
+      csvStringifyAsPromised.csvStringify = csvStringify;
+    });
 
-    it('uses Node\'s built-in Promise object by default', function () {
-      let promise = csvStringify(this.input)
+    it('uses Node\'s built-in Promise object by default', () => {
+      csvStringifyAsPromised.Promise = Promise;
+      const promise = csvStringifyAsPromised(input);
 
-      expect(promise).to.be.an.instanceOf(Promise)
-    })
+      expect(promise).to.be.an.instanceOf(Promise);
+    });
 
-    it('allows you to use your preferred promise library', function (done) {
-      let bluebird = require('bluebird')
-      csvStringify.Promise = bluebird
+    it('allows you to use your preferred promise library', async () => {
+      csvStringifyAsPromised.Promise = bluebird;
 
-      let promise = csvStringify(this.input)
+      const promise = csvStringifyAsPromised(input);
 
-      expect(promise).to.be.an.instanceOf(bluebird)
+      expect(promise).to.be.an.instanceOf(bluebird);
 
-      promise.then((csv) => {
-        expect(csv).to.eql('stringified csv')
-        csvStringify.Promise = Promise
-        done()
-      }).catch(done)
-    })
-  })
-})
+      const csvData = await promise;
+      expect(csvData).to.eql('stringified csv');
+    });
+  });
+});
