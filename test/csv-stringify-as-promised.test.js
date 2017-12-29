@@ -25,7 +25,6 @@ describe('csv-stringify-as-promised', () => {
       td.when(csv(this.input, {}, td.callback)).thenCallback(null, 'stringified csv')
 
       csvStringify(this.input).then((string) => {
-        td.verify(csv(this.input, {}, td.callback))
         expect(string).to.eql('stringified csv')
         done()
       }).catch(done)
@@ -35,7 +34,6 @@ describe('csv-stringify-as-promised', () => {
       td.when(csv(this.input, {}, td.callback)).thenCallback('an error')
 
       csvStringify(this.input).then(done).catch((err) => {
-        td.verify(csv(this.input, {}, td.callback))
         expect(err).to.eql('an error')
         done()
       })
@@ -46,7 +44,6 @@ describe('csv-stringify-as-promised', () => {
       td.when(csv(this.input, options, td.callback)).thenCallback(null, 'foo')
 
       csvStringify(this.input, options).then((string) => {
-        td.verify(csv(this.input, options, td.callback))
         done()
       }).catch(done)
     })
